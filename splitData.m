@@ -24,12 +24,12 @@ validationSet = randomData(valSetStart:valSetEnd, :);
 testSet = randomData(testSetStart:end, :);
 
 % Splits each set into the X and y matrices
-y = trainingSet(:, 1);
-X = trainingSet(:, 2:10);
-yval = validationSet(:, 1);
-Xval = validationSet(:, 2:10);
-ytest = testSet(:, 1);
-Xtest = testSet(:, 2:10);
+y = trainingSet(:, 7);
+X = [trainingSet(:, 1:6) trainingSet(:, 8:10)];
+yval = validationSet(:, 7);
+Xval = [validationSet(:, 1:6) validationSet(:, 8:10)];
+ytest = testSet(:, 7);
+Xtest = [testSet(:, 1:6) testSet(:, 8:10)]; 
 
 end
 

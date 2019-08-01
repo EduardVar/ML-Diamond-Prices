@@ -17,6 +17,7 @@ testSetStart = valSetEnd + 1;
 
 % Shuffles data to randomize training examples
 randomData = data(randperm(mTotal), :);
+%randomData = data;
 
 % Creates the sets using indices calculates previously
 trainingSet = randomData(1:trainSetEnd, :);

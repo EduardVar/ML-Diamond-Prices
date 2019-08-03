@@ -85,10 +85,6 @@ pause;
 %% Fiding best lambda
 
 disp("Finding the best theta ...");
-%{
-disp(size(X_poly));
-disp(size(X_poly_val));
-%}
 [lambda_vec, error_train, error_val] = ...
     validationCurve(X_poly, y, X_poly_val, yval, iter);
 
@@ -115,9 +111,12 @@ lambda = lambda_vec(index)
 fprintf('Optimal lambda found. Press enter to continue.\n');
 pause;
 
+%% TRAINS USING POLYNOMIAL FEATURES
+
+[theta] = trainLinearReg(X_poly, y, lambda, iter);
 
 %% Checking learning curve (polynomial regresssion)
-
+%{
 [theta] = trainLinearReg(X_poly, y, lambda, iter);
 
 [error_train, error_val] = ...
@@ -130,15 +129,17 @@ title('Learning curve for linear regression')
 legend('Train', 'Cross Validation')
 xlabel('Number of training examples')
 ylabel('Error')
-maxY = max(error_train); % Stores maximum Y value for cross val set
-axis([0 m 0 maxY])
+minY = min(error_val); % Stores maximum Y value for cross val set
+axis([0 m 0 minY])
 
 fprintf('Polynomial learning curve plotted. Press enter to continue.\n');
 pause;
 
 %% Checking learning curve (linear regression)
-%{
+
 disp("Checking learning curve ...");
+
+[theta] = trainLinearReg(X, y, lambda, iter);
 
 %lambda = 1;
 [error_train, error_val] = ...
@@ -158,17 +159,25 @@ fprintf('Linear learning curve plotted. Press enter to continue.\n');
 pause;
 %}
 
-%% Check overall performance cost
+%% Check overall performance cost (POLYNOMIAL)
+
 
 disp("Calculating overall performance ...");
 
-%disp(size(Xtest));
-%disp(size(theta));
+mTest = size(X_poly_test, 1);
+
+[J, grad] = linearRegFunc([ones(mTest, 1) X_poly_test(:, 2:end)], ytest, theta, lambda);
+disp("Final cost with theta: " + J);
+
+%% Check overall performance cost (LINEAR)
+%{
+disp("Calculating overall performance ...");
+
 mTest = size(Xtest, 1);
 
 [J, grad] = linearRegFunc([ones(mTest, 1) Xtest], ytest, theta, lambda);
 disp("Final cost with theta: " + J);
-
+%}
 
 %% User input
 

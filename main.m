@@ -27,6 +27,15 @@ n = size(X, 2); % Stores number of features
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
+%% Visualize Data
+% Plot training data
+plot(X(:,1), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+xlabel('Carat (x)');
+ylabel('Price (y)');
+
+fprintf('Data Visualized. Press enter to continue.\n');
+pause;
+
 %% Training
 
 % Initializes parameters for training
@@ -41,14 +50,11 @@ disp("Checking linearRegFunc.m (Cost and Gradient calculation) ...");
 disp("Gradient at current theta:");
 disp(grad);
 
-% Actually train theta iter times
-[theta] = trainLinearReg([ones(m, 1) X], y, lambda, iter);
-
 fprintf('Training Complete. Press enter to continue.\n');
 pause;
 
 %% Add polynomial features
-
+%{
 disp("Adding polynomial features ...");
 
 % What degree of polynomial to add on 
@@ -83,18 +89,17 @@ fprintf('  %f  \n', X_poly(1, :));
 
 fprintf('Adding polynomials complete. Press enter to continue.\n');
 pause;
-
+%}
 
 %% Fiding best lambda
-
+%{
 disp("Finding the best theta ...");
 [lambda_vec, error_train, error_val] = ...
     validationCurve(X_poly, y, X_poly_val, yval, iter);
-
-%{
+%}
 [lambda_vec, error_train, error_val] = ...
     validationCurve(X, y, Xval, yval, iter);
-%}
+
 close all;
 plot(lambda_vec, error_train, lambda_vec, error_val);
 legend('Train', 'Cross Validation');
@@ -115,8 +120,12 @@ fprintf('Optimal lambda found. Press enter to continue.\n');
 pause;
 
 %% TRAINS USING POLYNOMIAL FEATURES
-
+%{
 [theta] = trainLinearReg(X_poly, y, lambda, iter);
+%}
+
+%% TRAINS USING LINEAR
+[theta] = trainLinearReg(X, y, lambda, iter);
 
 %% Checking learning curve (polynomial regresssion)
 %{
@@ -128,7 +137,7 @@ pause;
                   lambda, iter);
 
 plot(1:m, error_train, 1:m, error_val);
-title('Learning curve for linear regression')
+title('Learning curve for polynomial regression')
 legend('Train', 'Cross Validation')
 xlabel('Number of training examples')
 ylabel('Error')
@@ -139,12 +148,9 @@ fprintf('Polynomial learning curve plotted. Press enter to continue.\n');
 pause;
 %}
 %% Checking learning curve (linear regression)
-%{
+
 disp("Checking learning curve ...");
 
-[theta] = trainLinearReg(X, y, lambda, iter);
-
-%lambda = 1;
 [error_train, error_val] = ...
     learningCurve([ones(m, 1) X], y, ...
                   [ones(size(Xval, 1), 1) Xval], yval, ...
@@ -155,32 +161,30 @@ title('Learning curve for linear regression')
 legend('Train', 'Cross Validation')
 xlabel('Number of training examples')
 ylabel('Error')
-maxY = max(error_train); % Stores maximum Y value for cross val set
-axis([0 m 0 maxY])
+minY = min(error_val); % Stores minimum Y value for cross val set
+axis([0 m 0 minY])
 
 fprintf('Linear learning curve plotted. Press enter to continue.\n');
 pause;
-%}
+
 
 %% Check overall performance cost (POLYNOMIAL)
 
-
-disp("Calculating overall performance ...");
+%{
+disp("Calculating overall polynomial performance ...");
 
 mTest = size(X_poly_test, 1);
 
-[J, grad] = linearRegFunc([ones(mTest, 1) X_poly_test(:, 2:end)], ytest, theta, lambda);
-disp("Final cost with theta: " + J);
-
-%% Check overall performance cost (LINEAR)
-%{
-disp("Calculating overall performance ...");
-
-mTest = size(Xtest, 1);
-
-[J, grad] = linearRegFunc([ones(mTest, 1) Xtest], ytest, theta, lambda);
+[J, grad] = linearRegFunc([ones(mTest, 1) X_poly_test(:, 2:end)], ytest, theta, 0);
 disp("Final cost with theta: " + J);
 %}
+%% Check overall performance cost (LINEAR)
+
+disp("Calculating overall linear performance ...");
+
+[J, grad] = linearRegFunc(Xtest, ytest, theta, 0);
+disp("Final cost with theta: " + J);
+
 
 %% User input
 

@@ -1,4 +1,4 @@
-function [X_poly] = quadraticFeatures(X, p)
+function [X_poly] = quadraticFeatures(X)
 %
 
 % Variables required
@@ -20,7 +20,5 @@ for i = 1:m,
 end
 
 X_poly = [X quadFeats];
-disp(size(X_poly));
-
 
 end

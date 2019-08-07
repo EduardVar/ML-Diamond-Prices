@@ -16,8 +16,8 @@ valSetEnd = valSetStart + twentyPrecent - 1;
 testSetStart = valSetEnd + 1;
 
 % Shuffles data to randomize training examples
-randomData = data(randperm(mTotal), :);
-%randomData = data;
+%randomData = data(randperm(mTotal), :);
+randomData = data;
 
 % Creates the sets using indices calculates previously
 trainingSet = randomData(1:trainSetEnd, :);
@@ -32,5 +32,11 @@ Xval = [validationSet(:, 1:6) validationSet(:, 8:10)];
 ytest = testSet(:, 7);
 Xtest = [testSet(:, 1:6) testSet(:, 8:10)]; 
 
+%% TESTING WHICH FEATURES MAKE A DIFFERENCE
+%{
+X = [X(:, 1) X(:, 5:end)];
+Xval = [Xval(:, 1) Xval(:, 5:end)];
+Xtest = [Xtest(:, 1) Xtest(:, 5:end)];
+%}
 end
 

@@ -16,33 +16,44 @@ disp("Checks the first five rows of the data ...");
 disp(data(1:5, :))
 
 % REDUCES DATA TO 1/40 of original size to speed up testing
-data = data(1:675, :);
+data = data(1:1798, :);
 
 % Uses function to split given data into training, CV, and test set
 [X, y, Xval, yval, Xtest, ytest] = splitData(data);
-
-disp(X(1:5, :));
-disp(y(1:5, :));
-disp(Xval(1:5, :));
-disp(yval(1:5, :));
 
 m = size(X, 1);  % Stores number of training examples
 n = size(X, 2); % Stores number of features
 
 % Initializes parameters for training
 theta = ones(n + 1, 1); % Sets theta to a matrix of ones (of features)
-lambda = 1; % Sets lambda [TESTING REQUIRED]
+lambda = 1; % Sets lambda will be changed later
 iter = 200;
 
 fprintf('Program initialized. Press enter to continue.\n');
 pause;
 
 %% Normalize Data
-%[X, mu, sigma] = featureNormalize(X);
-%[Xval, mu, sigma] = featureNormalize(Xval);
-%[Xtest, mu, sigma] = featureNormalize(Xtest);
+
+disp("Normalizing Data ...");
+
+[X, mu, sigma] = featureNormalize(X);
+
+Xval = bsxfun(@minus, Xval, mu);
+Xval = bsxfun(@rdivide, Xval, sigma);
+
+Xtest = bsxfun(@minus, Xtest, mu);
+Xtest = bsxfun(@rdivide, Xtest, sigma);
+
+disp(X(1:5, :));
+fprintf('Data Normalized. Press enter to continue.\n');
+pause;
 
 %% Visualize Data
+qqplot(X);
+
+fprintf('Data Visualized. Press enter to continue.\n');
+pause;
+%{
 % Plot training data
 plot(X(:,1), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
 xlabel('Carat (x)');
@@ -50,13 +61,10 @@ ylabel('Price (y)');
 
 fprintf('Data Visualized. Press enter to continue.\n');
 pause;
-
+%}
 %% Add polynomial features
 
 disp("Adding polynomial features ...");
-
-% What degree of polynomial to add on 
-p = 2;
 
 % Map X onto Polynomial Features and Normalize
 X_poly = quadraticFeatures(X);
@@ -87,7 +95,6 @@ fprintf('  %f  \n', X_poly(1, :));
 
 fprintf('Adding polynomials complete. Press enter to continue.\n');
 pause;
-
 
 %% Fiding best lambda
 
@@ -129,7 +136,7 @@ pause;
 
 %% Checking learning curve (polynomial regresssion)
 %{
-[theta] = trainLinearReg(X_poly, y, lambda, iter);
+% Make sure theta is trained
 
 [error_train, error_val] = ...
     learningCurve(X_poly, y, ...
@@ -169,7 +176,6 @@ pause;
 %}
 
 %% Check overall performance cost (POLYNOMIAL)
-
 
 disp("Calculating overall polynomial performance ...");
 

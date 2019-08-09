@@ -51,13 +51,12 @@ pause;
 %% Visualize Data
 qqplot(X);
 
-pause;
 %{
 % Plot training data
 plot(X(:,1), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
 xlabel('Carat (x)');
 ylabel('Price (y)');
-
+%}
 fprintf('Data Visualized. Press enter to continue.\n');
 pause;
 

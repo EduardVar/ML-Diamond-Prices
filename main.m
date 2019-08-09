@@ -15,7 +15,7 @@ data = convertToMatrix(table);
 disp("Checks the first five rows of the data ...");
 disp(data(1:5, :))
 
-% REDUCES DATA TO 1/40 of original size to speed up testing
+% REDUCES DATA TO 1/30 of original size to speed up testing
 data = data(1:1798, :);
 
 % Uses function to split given data into training, CV, and test set

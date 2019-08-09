@@ -51,7 +51,6 @@ pause;
 %% Visualize Data
 qqplot(X);
 
-fprintf('Data Visualized. Press enter to continue.\n');
 pause;
 %{
 % Plot training data
@@ -61,7 +60,7 @@ ylabel('Price (y)');
 
 fprintf('Data Visualized. Press enter to continue.\n');
 pause;
-%}
+
 %% Add polynomial features
 
 disp("Adding polynomial features ...");
@@ -194,9 +193,19 @@ disp("Final cost with theta: " + J);
 
 %% User input
 
+% TEST [0.23 "Ideal" "E" "SI2" 61.5 55  3.95 3.98 2.43]
+testExample = [0.23 5 6 2 61.5 55  3.95 3.98 2.43]; % Price should be 326
+
+[testExample, mu, sigma] = featureNormalize(testExample);
+
+example_poly = quadraticFeatures(testExample);
+
+example_poly = bsxfun(@minus, example_poly, mu);
+example_poly = bsxfun(@rdivide, example_poly, sigma);
+example_poly = [ones(size(example_poly, 1), 1), example_poly];         % Add Ones
 
 
+predictedPrice = example_poly * theta;
 
-
-
+disp("The predicted price using this theta is: " + predictedPrice);
 

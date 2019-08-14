@@ -38,6 +38,28 @@ lambda = 1; % WILL NEED TO TRAIN
 fprintf('Program initialized. Press enter to continue.\n');
 %pause;
 
+%% Normalize Data
+
+disp("Normalizing Data ...");
+
+[X, mu, sigma] = featureNormalize(X);
+
+disp(X(1:5, :));
+fprintf('Data Normalized. Press enter to continue.\n');
+%pause;
+
+%% Visualize Data
+qqplot(X);
+
+%{
+% Plot training data
+plot(X(:,1), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+xlabel('Carat (x)');
+ylabel('Price (y)');
+%}
+fprintf('Data Visualized. Press enter to continue.\n');
+pause;
+
 %% Sets up functions for training
 
 % Create "short hand" for the cost function to be minimized
@@ -45,15 +67,11 @@ costFunction = @(p) nnCostFunction(p, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
                                    num_labels, X, y, lambda);
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                             
+
+%% More stuff
+
+
+
 
 
 

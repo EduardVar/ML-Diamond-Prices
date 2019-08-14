@@ -1,4 +1,4 @@
-function [accuracy] = calcAccuracy(Theta1, Theta2, Xtest, ytest, percentBool)
+function [accuracy, error] = calcAccuracy(Theta1, Theta2, Xtest, ytest)
 %CALCACCURACY Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -12,17 +12,14 @@ a2 = sigmoid(z2);
 a2biased = [ones(m, 1) a2];
 z3 = a2biased * Theta2';
 
-
 predPrices = z3;
 
-if percentBool,
-    errors = (predPrices ./ ytest) - 1;
-    percentError = sum(errors) / m;
-    accuracy = (1 - percentError) * 100;
-else,
-    error = ((sum(ytest - predPrices).^2)/m ) .^ (1/2);
-    accuracy = error;
-end
+
+differences = (predPrices ./ ytest) - 1;
+percentError = sum(differences) / m;
+accuracy = (1 - percentError) * 100;
+
+error = ((sum(ytest - predPrices).^2)/m ) .^ (1/2);
 
 end
 

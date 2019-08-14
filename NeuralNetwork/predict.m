@@ -3,17 +3,18 @@ function p = predict(Theta1, Theta2, X)
 %   p = PREDICT(Theta1, Theta2, X) outputs the predicted label of X given the
 %   trained weights of a neural network (Theta1, Theta2)
 
-% Useful values
+
 m = size(X, 1);
-num_labels = size(Theta2, 1);
 
-p = zeros(size(X, 1), 1);
+a1 = X;
+a1biased = [ones(m, 1) a1];
+z2 = a1biased * Theta1';
 
-h1 = sigmoid([ones(m, 1) X] * Theta1');
-h2 = sigmoid([ones(m, 1) h1] * Theta2'); % Don't activate last one?
-%[dummy, p] = max(h2, [], 2);
-p = [ones(m, 1) h1] * Theta2';
-%p = h2;
+a2 = sigmoid(z2);
+a2biased = [ones(m, 1) a2];
+z3 = a2biased * Theta2';
+
+p = z3;
 
 % =========================================================================
 

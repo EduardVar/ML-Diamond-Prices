@@ -75,9 +75,9 @@ J = ((1/m) * sum(kSum)) + ((lambda/(2*m)) * innerReg);
 %}
 
 costSum = (1/(2*m)) * sum((hyp - y) .^ 2);
-%costReg = (lambda/(2*m)) * sum(noBiasTheta .^ 2);
 costReg = sum(sum(newTheta1.^2)) + sum(sum(newTheta2.^2)); % Adds reg
 J = costSum + (lambda/(2*m)) * costReg;
+
 
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad.

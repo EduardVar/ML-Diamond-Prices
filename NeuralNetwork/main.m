@@ -15,16 +15,18 @@ data = convertToMatrix(table);
 disp("Checks the first five rows of the data ...");
 disp(data(1:5, :))
 
+% REDUCES DATA to X examples for testing purposes
+data = data(1:5000, :);
 
 % Uses function to split given data into training, CV, and test set
-[X, y, Xtest, ytest] = splitData(data);
+[X, y, Xval, yval, Xtest, ytest] = splitData(data);
 
 disp("Checks the first five rows X ...");
 disp(X(1:5, :))
 
 fprintf('Data loaded and stored. Press enter to continue.\n');
 
-%% Add polynomial features
+%% Normalize Data
 
 fprintf("\nNormalizing Data ...\n");
 
@@ -33,10 +35,16 @@ fprintf("\nNormalizing Data ...\n");
 fprintf('Data Normalized.\n');
 %pause;
 
+%% Add polynomial features
+%{
 fprintf("\nAdding polynomial features ...");
 
 X = quadraticFeatures(X);
 [X, mu, sigma] = featureNormalize(X);  % Normalize
+
+Xval = quadraticFeatures(Xval);
+Xval = bsxfun(@minus, Xval, mu);
+Xval = bsxfun(@rdivide, Xval, sigma);
 
 Xtest = quadraticFeatures(Xtest);
 Xtest = bsxfun(@minus, Xtest, mu);
@@ -44,7 +52,7 @@ Xtest = bsxfun(@rdivide, Xtest, sigma);
 
 fprintf('Adding polynomials complete. Press enter to continue.\n');
 %pause;
-
+%}
 %% Initialization
 
 fprintf("\nInitializing program ...");
@@ -56,8 +64,8 @@ input_layer_size  = n;  % n Input Features (can extend with POLYNOMIALS)
 hidden_layer_size = 100;   % 200 hidden units
 num_labels = 1;          % 1 output label (price)  
 
-options = optimset('MaxIter', 400);  % Increase iters for more training!
-lambda = 3; % WILL NEED TO TEST FOR TRAINING
+options = optimset('MaxIter', 100);  % Increase iters for more training!
+lambda = 10; % WILL NEED TO TEST FOR TRAINING
 
 
 fprintf('\nInitializing Neural Network Parameters ...\n')
@@ -71,10 +79,6 @@ initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
 
 fprintf('Program initialized. Press enter to continue.\n');
 %pause;
-
-%% Normalize Data
-
-
 
 %% Visualize Data
 
@@ -91,30 +95,24 @@ costFunction = @(p) nnCostFunction(p, ...
                                    hidden_layer_size, ...
                                    num_labels, X, y, lambda);
 
+%% Find best lambda
+                               
 %% Train Neural Network
 
 fprintf("\nTraining neural network ...\n");
 
-% Now, costFunction is a function that takes in only one argument (the
-% neural network parameters)
-[nn_params, cost] = fmincg(costFunction, initial_nn_params, options);
-
-% Obtain Theta1 and Theta2 back from nn_params
-Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
-                 hidden_layer_size, (input_layer_size + 1));
-
-Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
-                 num_labels, (hidden_layer_size + 1));
+[Theta1,Theta2] = trainNN(costFunction, initial_nn_params, options, ...
+                           input_layer_size, hidden_layer_size, num_labels);
              
 fprintf('Neural network trained. Press enter to continue.\n');
-pause;
+%pause;
              
 %% Check prediction accuracy
 
-[accuracy] = calcAccuracy(Theta1, Theta2, Xtest, ytest, true);
+[accuracy] = calcAccuracy(Theta1, Theta2, Xtest, ytest, false);
 
 prediction = predict(Theta1, Theta2, Xtest(1, :));
 fprintf('\nPredicted: %f\nReal: %f\n', prediction, ytest(1, :));
 
-fprintf('\nThe calculated error is: %f\n', accuracy);
+fprintf('\nError is: %f\n', accuracy);
 

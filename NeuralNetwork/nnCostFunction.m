@@ -59,18 +59,29 @@ a2 = sigmoid(z2);
 a2biased = [ones(m, 1) a2];
 z3 = a2biased * Theta2';
 
-a3 = sigmoid(z3);
+%a3 = sigmoid(z3);
+a3 = z3;
 hyp = a3;
 
+%disp(hyp);
+%pause;
+
+%{
 innerCost = (-y .* log(hyp)) - ((1 - y) .* log(1 - hyp));
 kSum = sum(innerCost);  % k is label num (ex: 1, 2, 3... in classification)
 innerReg = sum(sum(newTheta1.^2)) + sum(sum(newTheta2.^2)); % Adds reg
 
 J = ((1/m) * sum(kSum)) + ((lambda/(2*m)) * innerReg);
+%}
 
+costSum = (1/(2*m)) * sum((hyp - y) .^ 2);
+%costReg = (lambda/(2*m)) * sum(noBiasTheta .^ 2);
+costReg = sum(sum(newTheta1.^2)) + sum(sum(newTheta2.^2)); % Adds reg
+J = costSum + (lambda/(2*m)) * costReg;
 
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad.
+
 
 % deltas (d) are errors
 d3 = a3 - y; 
@@ -78,10 +89,23 @@ d2 = d3 * newTheta2 .* sigmoidGradient(z2);
 
 % Deltas (traingle) are sum of difference with previous layer's activation
 Delta2 = d3' * a2biased; 
-Theta2_grad = ((1/m) * Delta2) + ((lambda/m) * noBiasTheta2);
-
 Delta1 = d2' * a1biased;
+
+%{
+disp(size(Delta2));
+disp(size(Delta1));
+disp(size(X));
+
+grad2Sum = (1/m) * sum((Delta2) .* X);
+grad1Sum = (1/m) * sum((Delta1) .* X);
+
+Theta2_grad = grad2Sum + ((lambda/m) * noBiasTheta2);
+Theta1_grad = grad1Sum + ((lambda/m) * noBiasTheta1);
+%}
+
+Theta2_grad = ((1/m) * Delta2) + ((lambda/m) * noBiasTheta2);
 Theta1_grad = ((1/m) * Delta1) + ((lambda/m) * noBiasTheta1);
+
 
 
 % Unroll gradients

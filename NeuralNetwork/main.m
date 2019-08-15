@@ -57,7 +57,7 @@ Xtest = quadraticFeatures(Xtest);
 Xtest = bsxfun(@minus, Xtest, mu);
 Xtest = bsxfun(@rdivide, Xtest, sigma);
 
-fprintf('Adding polynomials complete. Press enter to continue.\n');
+fprintf('\nAdding polynomials complete. Press enter to continue.\n');
 %pause;
 %}
 %% Initialization

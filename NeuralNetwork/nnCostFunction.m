@@ -60,19 +60,8 @@ a2biased = [ones(m, 1) a2];
 z3 = a2biased * Theta2';
 
 %a3 = sigmoid(z3);
-a3 = z3;
-hyp = a3;
-
-%disp(hyp);
-%pause;
-
-%{
-innerCost = (-y .* log(hyp)) - ((1 - y) .* log(1 - hyp));
-kSum = sum(innerCost);  % k is label num (ex: 1, 2, 3... in classification)
-innerReg = sum(sum(newTheta1.^2)) + sum(sum(newTheta2.^2)); % Adds reg
-
-J = ((1/m) * sum(kSum)) + ((lambda/(2*m)) * innerReg);
-%}
+%a3 = z3;
+hyp = z3;
 
 costSum = (1/(2*m)) * sum((hyp - y) .^ 2);
 costReg = sum(sum(newTheta1.^2)) + sum(sum(newTheta2.^2)); % Adds reg
@@ -84,7 +73,7 @@ J = costSum + (lambda/(2*m)) * costReg;
 
 
 % deltas (d) are errors
-d3 = a3 - y; 
+d3 = z3 - y; 
 d2 = d3 * newTheta2 .* sigmoidGradient(z2);
 
 % Deltas (traingle) are sum of difference with previous layer's activation

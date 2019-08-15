@@ -15,7 +15,7 @@ z3 = a2biased * Theta2';
 predPrices = z3;
 
 
-differences = (predPrices ./ ytest) - 1;
+differences = abs((predPrices ./ ytest) - 1);
 percentError = sum(differences) / m;
 accuracy = (1 - percentError) * 100;
 

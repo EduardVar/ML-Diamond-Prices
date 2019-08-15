@@ -18,6 +18,20 @@ disp(data(1:5, :))
 % REDUCES DATA to X examples for testing purposes
 data = data(1:10000, :);
 
+%% Normalize Data (before)
+%{
+yColumn = data(:, 7);
+allX = [data(:, 1:6) data(:, 8:10)];
+
+[allX, mu, sigma] = featureNormalize(allX);
+
+disp(size(yColumn(:, 1)));
+disp(size(allX));
+
+data = [allX(:, 1:6) yColumn(:, 1) allX(:, 7:end)];
+disp(size(data));
+%}
+%% Split Data
 % Uses function to split given data into training, CV, and test set
 [X, y, Xval, yval, Xtest, ytest] = splitData(data);
 

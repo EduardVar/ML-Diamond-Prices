@@ -92,9 +92,28 @@ Theta2_grad = grad2Sum + ((lambda/m) * noBiasTheta2);
 Theta1_grad = grad1Sum + ((lambda/m) * noBiasTheta1);
 %}
 
+disp(size(d3));
+disp(size(X));
+disp(size((d3 .* X)));
+disp("FIRST");
+
+Theta2sum = (1/m) * sum(d3 .* X);
+Theta2deriv = (lambda/m) * noBiasTheta2';
+
+disp(size(Theta2sum));
+disp(size(Theta2deriv));
+disp("SECOND");
+
+Theta2_grad = (Theta2sum + Theta2deriv)';
+disp(size(Theta2_grad));
+
 Theta2_grad = ((1/m) * Delta2) + ((lambda/m) * noBiasTheta2);
 Theta1_grad = ((1/m) * Delta1) + ((lambda/m) * noBiasTheta1);
 
+disp(size(Theta2_grad));
+disp(size(Theta1_grad));
+disp("END");
+%pause;
 
 
 % Unroll gradients

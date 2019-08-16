@@ -16,7 +16,7 @@ disp("Checks the first five rows of the data ...");
 disp(data(1:5, :))
 
 % REDUCES DATA to X examples for testing purposes
-data = data(1:10000, :);
+data = data(1:2000, :);
 
 %% Normalize Data (before)
 %{
@@ -51,7 +51,6 @@ Xval = bsxfun(@rdivide, Xval, sigma);
 
 Xtest = bsxfun(@minus, Xtest, mu);
 Xtest = bsxfun(@rdivide, Xtest, sigma);
-
 
 fprintf('Data Normalized.\n');
 %pause;
@@ -112,7 +111,7 @@ fprintf('Data Visualized. Press enter to continue.\n');
 
 fprintf("\nFinding the best theta ...\n");
 
-options = optimset('MaxIter', 100);
+options = optimset('MaxIter', 50);
 
 [lambda_vec, error_train, error_val] = ...
     validationCurve(X, y, Xval, yval, initial_nn_params, options, ...
@@ -144,7 +143,7 @@ costFunction = @(p) nnCostFunction(p, ...
 
 fprintf("\nTraining neural network ...\n");
 
-options = optimset('MaxIter', 1000);
+options = optimset('MaxIter', 100);
 
 [Theta1,Theta2] = trainNN(costFunction, initial_nn_params, options, ...
                           input_layer_size, hidden_layer_size, num_labels);
@@ -152,6 +151,26 @@ options = optimset('MaxIter', 1000);
              
 fprintf('Neural network trained. Press enter to continue.\n');
 %pause;
+
+%% Checking learning curve 
+
+disp("Checking learning curve ...");
+
+[error_train, error_val] = ...
+    learningCurve(X, y, Xval, yval, initial_nn_params, options, ...
+                    input_layer_size, hidden_layer_size, num_labels, lambda);
+
+plot(1:m, error_train, 1:m, error_val);
+title('Learning curve for linear regression')
+legend('Train', 'Cross Validation')
+xlabel('Number of training examples')
+ylabel('Error')
+minY = min(error_val); % Stores minimum Y value for cross val set
+axis([0 m 0 minY])
+
+fprintf('Linear learning curve plotted. Press enter to continue.\n');
+pause;
+
              
 %% Check prediction accuracy
 

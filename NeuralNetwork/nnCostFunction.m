@@ -81,40 +81,33 @@ Delta2 = d3' * a2biased;
 Delta1 = d2' * a1biased;
 
 %{
-disp(size(Delta2));
-disp(size(Delta1));
-disp(size(X));
-
-grad2Sum = (1/m) * sum((Delta2) .* X);
-grad1Sum = (1/m) * sum((Delta1) .* X);
-
-Theta2_grad = grad2Sum + ((lambda/m) * noBiasTheta2);
-Theta1_grad = grad1Sum + ((lambda/m) * noBiasTheta1);
-%}
-
-disp(size(d3));
-disp(size(X));
-disp(size((d3 .* X)));
-disp("FIRST");
+fprintf("\nd3: [%d %d]\n", size(d3, 1), size(d3, 2));
+fprintf("\nX: [%d %d]\n", size(X, 1), size(X, 2));
+fprintf("\nd3 .* X: [%d %d]\n", size((d3 .* X), 1), size((d3 .* X), 2));
+fprintf("\nsum(d3 .* X): [%d %d]\n", size(sum(d3 .* X), 1), size(sum(d3 .* X), 2));
+fprintf("FIRST\n");
 
 Theta2sum = (1/m) * sum(d3 .* X);
 Theta2deriv = (lambda/m) * noBiasTheta2';
 
-disp(size(Theta2sum));
-disp(size(Theta2deriv));
-disp("SECOND");
+fprintf("\nTheta2sum: [%d %d]\n", size(Theta2sum, 1), size(Theta2sum, 2));
+fprintf("\nTheta2deriv: [%d %d]\n", size(Theta2deriv, 1), size(Theta2deriv, 2));
+fprintf("SECOND\n");
 
 Theta2_grad = (Theta2sum + Theta2deriv)';
-disp(size(Theta2_grad));
+
+fprintf("\nMy Theta2_grad: [%d %d]\n", size(Theta2_grad, 1), size(Theta2_grad, 2));
+%}
 
 Theta2_grad = ((1/m) * Delta2) + ((lambda/m) * noBiasTheta2);
 Theta1_grad = ((1/m) * Delta1) + ((lambda/m) * noBiasTheta1);
 
-disp(size(Theta2_grad));
-disp(size(Theta1_grad));
-disp("END");
-%pause;
-
+%{
+fprintf("\nLogistic Theta2_grad: [%d %d]\n", size(Theta2_grad, 1), size(Theta2_grad, 2));
+fprintf("\nLogistic Theta1_grad: [%d %d]\n", size(Theta1_grad, 1), size(Theta1_grad, 2));
+fprintf("END");
+pause;
+%}
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];

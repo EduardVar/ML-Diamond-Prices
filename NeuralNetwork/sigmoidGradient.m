@@ -6,6 +6,12 @@ function g = sigmoidGradient(z)
 %   vector. In particular, if z is a vector or matrix, you should return
 %   the gradient for each element.
 
-g = sigmoid(z) .* (1 - sigmoid(z));
-
+%g = sigmoid(z) .* (1 - sigmoid(z)); % Sigmoid gradient Descent
+g = 1 - (sigmoid(z)).^2;            % Tanh descent
+%{
+if z < 0                            % ReLU gradient descent
+    g = 0;
+else
+    g = z;
+%}
 end

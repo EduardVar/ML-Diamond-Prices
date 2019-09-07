@@ -81,7 +81,8 @@ fprintf("\nInitializing program ...");
 
 % Initializes parameters for training
 input_layer_size  = n;  % n Input Features (can extend with POLYNOMIALS)
-hidden_layer_size = 64;   % 128 hidden units
+L_layers = 1;           % Amount of hidden layers (there will be L of them)
+hidden_layer_size = 128;   % 8 hidden units
 num_labels = 1;          % 1 output label (price)  
 
 %options = optimset('MaxIter', 100);  % Increase iters for more training!
@@ -90,12 +91,16 @@ num_labels = 1;          % 1 output label (price)
 
 fprintf('\nInitializing Neural Network Parameters ...\n')
 % Randomely initializes thetas
+%{
 initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
 initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
 
 % Unroll parameters
 initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
+%}
 
+initial_nn_params = randInitializeWeights(input_layer_size, ...
+                                hidden_layer_size, num_labels, L_layers);
 
 fprintf('Program initialized. Press enter to continue.\n');
 %pause;
@@ -143,7 +148,7 @@ costFunction = @(p) nnCostFunction(p, ...
 
 fprintf("\nTraining neural network ...\n");
 
-options = optimset('MaxIter', 1000);
+options = optimset('MaxIter', 2000);
 
 [Theta1,Theta2] = trainNN(costFunction, initial_nn_params, options, ...
                           input_layer_size, hidden_layer_size, num_labels);

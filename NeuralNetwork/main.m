@@ -82,7 +82,7 @@ fprintf("\nInitializing program ...");
 % Initializes parameters for training
 input_layer_size  = n;  % n Input Features (can extend with POLYNOMIALS)
 L_layers = 1;           % Amount of hidden layers (there will be L of them)
-hidden_layer_size = 128;   % 8 hidden units
+hidden_layer_size = 32;   % 8 hidden units
 num_labels = 1;          % 1 output label (price)  
 
 %options = optimset('MaxIter', 100);  % Increase iters for more training!

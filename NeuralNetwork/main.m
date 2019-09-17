@@ -15,25 +15,18 @@ data = convertToMatrix(table);
 disp("Checks the first five rows of the data ...");
 disp(data(1:5, :))
 
+%% Distribution Parameter
+
 % REDUCES DATA to X examples for testing purposes
 data = data(1:5000, :);
 
-%% Normalize Data (before)
-%{
-yColumn = data(:, 7);
-allX = [data(:, 1:6) data(:, 8:10)];
+% Variable distriPercent describes cross-val and test set size precentage
+% relative to the entire data set
+distriPercent = 20;
 
-[allX, mu, sigma] = featureNormalize(allX);
-
-disp(size(yColumn(:, 1)));
-disp(size(allX));
-
-data = [allX(:, 1:6) yColumn(:, 1) allX(:, 7:end)];
-disp(size(data));
-%}
 %% Split Data
 % Uses function to split given data into training, CV, and test set
-[X, y, Xval, yval, Xtest, ytest] = splitData(data);
+[X, y, Xval, yval, Xtest, ytest] = splitData(data, distriPercent);
 
 disp("Checks the first five rows X ...");
 disp(X(1:5, :))
